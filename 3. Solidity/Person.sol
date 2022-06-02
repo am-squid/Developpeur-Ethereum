@@ -10,9 +10,23 @@ contract Whitelist {
 
     Person[] public persons;
 
-    function addPerson(string memory _name, uint _age) public {
+    /*
+    * Adds a person to the list
+    * @param _name string name of the person
+    * @param _age uint age of the person
+    */
+    function add(string memory _name, uint _age) public {
         Person memory person;
         person.name = _name;
         person.age = _age;
+        //Adding the person to the list
+        persons.push(person);
+    }
+
+    /*
+    *  Removes the last person added to the list
+    */
+    function remove() public {
+        persons.pop();
     }
 }
