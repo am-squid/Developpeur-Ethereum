@@ -2,6 +2,6 @@
 
 pragma solidity >=0.8.14 <0.9.0;
 
-contract Whitelist{
+contract Whitelist {
     mapping(address => bool) whitelist;
 }
