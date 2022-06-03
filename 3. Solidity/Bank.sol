@@ -12,6 +12,7 @@ contract Bank{
 
     //Transfert money from sender to recipient
     function transfert(address _recipient, uint _amount) public{
+        require(_recipient != address(0), "You cannot transfer to the address zero");
         require(_amount > 0, "Negative or zero amount is forbidden");
         require(_balances[msg.sender] >= _amount, "Transfered amount exceed account balance");
         _balances[msg.sender] -= _amount;
