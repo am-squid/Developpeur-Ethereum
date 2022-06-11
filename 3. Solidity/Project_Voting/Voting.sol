@@ -7,6 +7,8 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 /// @author Yohann Youssouf - promo Ropsten
 /// @title Voting contract
 contract Voting is Ownable{
+    // Variables 
+
     // States of the voting session
     enum WorkflowStatus {
         RegisteringVoters,
@@ -16,13 +18,6 @@ contract Voting is Ownable{
         VotingSessionEnded,
         VotesTallied
     }
-
-    // Events
-    event VoterRegistered(address voterAddress); 
-    event WorkflowStatusChange(WorkflowStatus previousStatus, WorkflowStatus newStatus);
-    event ProposalRegistered(uint proposalId);
-    event Voted (address voter, uint proposalId);
-
     // Structs
     struct Voter {
         bool isRegistered;
@@ -45,9 +40,31 @@ contract Voting is Ownable{
         uint winningProposalId;
         WorkflowStatus sessionState;
     }
-
     uint public sessionNumber;
     mapping(uint => Session) sessions;
+
+    // Events
+
+    event VoterRegistered(address voterAddress); 
+    event WorkflowStatusChange(WorkflowStatus previousStatus, WorkflowStatus newStatus);
+    event ProposalRegistered(uint proposalId);
+    event Voted (address voter, uint proposalId);
+
+    // Constructor
+
+    /**
+     * @notice constructor - create the first voting session 
+     * @param _name name of the first session
+     * @param _description description of the first session
+     */ 
+    constructor(string memory _name, string memory _description) {
+        Session storage s = sessions[sessionNumber];
+        s.info = SessionDetails(_name, _description, sessionNumber);
+        s.sessionState = WorkflowStatus.RegisteringVoters;
+        emit WorkflowStatusChange(WorkflowStatus.RegisteringVoters, WorkflowStatus.RegisteringVoters);
+    }
+
+    // Modifiers
 
     /// @dev modifier that require the user to be whitelisted
     modifier onlyVoter(){
@@ -76,17 +93,7 @@ contract Voting is Ownable{
         _;
     }
 
-    /**
-     * @notice create the first voting session 
-     * @param _name name of the first session
-     * @param _description description of the first session
-     */ 
-    constructor(string memory _name, string memory _description) {
-        Session storage s = sessions[sessionNumber];
-        s.info = SessionDetails(_name, _description, sessionNumber);
-        s.sessionState = WorkflowStatus.RegisteringVoters;
-        emit WorkflowStatusChange(WorkflowStatus.RegisteringVoters, WorkflowStatus.RegisteringVoters);
-    }
+    // Functions
 
     /**
      * @notice Creates a new voting session - onlyAdmin
