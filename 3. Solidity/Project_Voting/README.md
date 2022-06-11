@@ -4,7 +4,7 @@
 There is only one active voting session at any given time. 
 This limitation is set because the given events does not integrate a session number.
 With this constraint, these events would become meaningless with multiple active sessions.
-I limit the number of active session to one to keep them useful.
+I decided to limit the number of active session to one, to keep them useful.
 
 ## Getters
 The only public param I have for my contract is the sessionNumber.
@@ -30,8 +30,8 @@ As such we don't need to watch for the number of voters.
 If we had to change the voting type we would need to count the voters that did not vote. 
 
 ## Case of the first session
-The first session is created in the constructor and it requires the admin to deploy the contract with the name and description of the voting session of id 0.
-The first emit of the WorkflowStatusChange is will say that the previous Workflow status is "RegisteringVoters", this is a limitation of the WorkflowStatus struct that doesn't implement a "Contract created" item.
+The first session is created in the constructor and requires the admin to deploy the contract with the name and description for the first session.
+The first emit of the WorkflowStatusChange will say that the previous Workflow status is "RegisteringVoters": this is a limitation of the WorkflowStatus struct that doesn't implement a "Contract created" item.
 
 ## Admin can be Voter
 The admin is not necessarily a voter but can register itself as a voter.
