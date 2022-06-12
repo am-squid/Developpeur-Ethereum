@@ -37,3 +37,7 @@ The first emit of the WorkflowStatusChange will say that the previous Workflow s
 The admin is not necessarily a voter but can register itself as a voter.
 Admins that are not voters can not register proposals and can not vote for proposals.
 I believe this is more logical: tech admin can handle the tedious technical process, yet he may not be allowed to take part in business related votes.
+
+## List of Voters
+There is no array of voters that could allow quick iteration through addresses. I decided that users will require the wallet address of a Voter to check its Vote.
+The Voter is accessible, though. Since there is an emit of the whitelisted voter, I believe that a front end could listen to the events to keep track of the voters address and propose a voter list without needing more gas when admin whitelist a Voter.
