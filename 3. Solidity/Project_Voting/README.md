@@ -16,9 +16,10 @@ Getters I wrote :
 - getProposal
 - getWinner
 - getWinnerForSession
+- getVoterList
+- getVoterListForSession
 
 Getters I did not write but easy to add :
-- getVoterForSession
 - getNumberOfProposalForSession
 - getProposalForSession
 - getNumberOfVoters
@@ -39,7 +40,7 @@ Admins that are not voters can not register proposals and can not vote for propo
 I believe this is more logical: tech admin can handle the tedious technical process, yet he may not be allowed to take part in business related votes.
 
 ## List of Voters
-There is no array of voters that could allow quick iteration through addresses. I decided that users will require the wallet address of a Voter to check its Vote.
-The Voter is accessible, though. Since there is an emit of the whitelisted voter, I believe that a front end could listen to the events to keep track of the voters address and propose a voter list without needing more gas when admin whitelist a Voter.
+There is an array listing the voters for each session.
+Since there is an emit of the whitelisted voter, I believe that a front end could listen to the events to keep track of the voters address and propose a voter list without needing more gas when admin whitelist a Voter.
 Each session have its own voters list, since not everyone would be allowed to vote for every decision.
 Example : If a voting session is about the daily scrum meeting accross the tech department, financials may not be involved.

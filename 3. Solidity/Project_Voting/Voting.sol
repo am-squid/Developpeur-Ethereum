@@ -36,6 +36,7 @@ contract Voting is Ownable{
     struct Session {
         SessionDetails info;
         mapping(address=>Voter) voters;
+        address[] voterList;
         Proposal[] proposals;
         uint winningProposalId;
         WorkflowStatus sessionState;
@@ -126,6 +127,7 @@ contract Voting is Ownable{
         Session storage s = sessions[sessionNumber];
         s.voters[_address].isRegistered = true;
         s.voters[_address].hasVoted = false;
+        s.voterList.push(_address);
         emit VoterRegistered(_address);
     }
 
@@ -137,6 +139,25 @@ contract Voting is Ownable{
     function getVoter(address _address) public view returns(Voter memory) {
         Session storage s = sessions[sessionNumber];
         return s.voters[_address];
+    }
+
+    /**
+     * @notice Returns the list of voters for the current session
+     * @return address[] List of address in the current session
+     */
+    function getVoterList() public view returns(address[] memory) {
+        Session storage s = sessions[sessionNumber];
+        return s.voterList;
+    }
+
+    /**
+     * @notice Returns the list of voters for a previous session
+     * @param _sessionId Id of the session 
+     * @return address[] list of address in the given session
+     */
+    function getVoterListForSession(uint _sessionId) public view requireExistingSession(_sessionId) returns(address[] memory) {
+        Session storage s = sessions[_sessionId];
+        return s.voterList;
     }
 
     /**
