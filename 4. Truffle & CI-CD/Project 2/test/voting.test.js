@@ -26,11 +26,11 @@ contract("TestVoting", accounts => {
                 await expectRevert(votingInstance.endProposalsRegistering.call({from: admin}), "Registering proposals havent started yet");
             });
 
-            it("... should forbid to switch to voting session started state state", async () => {
+            it("... should forbid to switch to voting session started state", async () => {
                 await expectRevert(votingInstance.startVotingSession.call({from: admin}), "Registering proposals phase is not finished");
             });
 
-            it("... should forbid to switch to voting session ended state state", async () => {
+            it("... should forbid to switch to voting session ended state", async () => {
                 await expectRevert(votingInstance.endVotingSession.call({from: admin}), "Voting session havent started yet");
             });
 
@@ -53,11 +53,11 @@ contract("TestVoting", accounts => {
                 expect(new BN(currentStatus)).to.be.bignumber.equal(new BN(1));
             });
 
-            it("... should forbid to switch to voting session started state state", async () => {
+            it("... should forbid to switch to voting session started state", async () => {
                 await expectRevert(votingInstance.startVotingSession.call(), "Registering proposals phase is not finished");
             });
 
-            it("... should forbid to switch to voting session ended state state", async () => {
+            it("... should forbid to switch to voting session ended state", async () => {
                 await expectRevert(votingInstance.endVotingSession.call(), "Voting session havent started yet");
             });
 
@@ -84,7 +84,7 @@ contract("TestVoting", accounts => {
                 await expectRevert(votingInstance.startProposalsRegistering.call({from: admin}), 'Registering proposals cant be started now');
             });
 
-            it("... should forbid to switch to voting session ended state state", async () => {
+            it("... should forbid to switch to voting session ended state", async () => {
                 await expectRevert(votingInstance.endVotingSession.call(), "Voting session havent started yet");
             });
 
@@ -142,7 +142,7 @@ contract("TestVoting", accounts => {
                 await expectRevert(votingInstance.endProposalsRegistering.call({from: admin}), "Registering proposals havent started yet");
             });
 
-            it("... should forbid to switch to voting session started state state", async () => {
+            it("... should forbid to switch to voting session started state", async () => {
                 await expectRevert(votingInstance.startVotingSession.call(), "Registering proposals phase is not finished");
             });
 
@@ -169,11 +169,11 @@ contract("TestVoting", accounts => {
                 await expectRevert(votingInstance.endProposalsRegistering.call({from: admin}), "Registering proposals havent started yet");
             });
 
-            it("... should forbid to switch to voting session started state state", async () => {
+            it("... should forbid to switch to voting session started state", async () => {
                 await expectRevert(votingInstance.startVotingSession.call(), "Registering proposals phase is not finished");
             });
 
-            it("... should forbid to switch to voting session ended state state", async () => {
+            it("... should forbid to switch to voting session ended state", async () => {
                 await expectRevert(votingInstance.endVotingSession.call(), "Voting session havent started yet");
             });
         });
