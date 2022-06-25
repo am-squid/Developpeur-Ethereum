@@ -9,6 +9,67 @@ contract("TestVoting", accounts => {
     const voter3 = accounts[3];
     const nonVoter = accounts[4];
 
+    describe("Tests : access control", function() {
+        let votingInstance;
+
+        this.beforeEach(async function () {
+            votingInstance = await Voting.new({from: admin});
+        });
+
+        it("... should only allow admin to add voters", async () => {
+            await expectRevert(votingInstance.addVoter.call(voter2, {from: voter1}), "Ownable: caller is not the owner");
+        });
+
+        it("... should only allow admin to change workflow statuses", async () => {
+            await expectRevert(votingInstance.startProposalsRegistering.call({from: voter1}), "Ownable: caller is not the owner");
+            // Fast forward
+            await votingInstance.startProposalsRegistering({from: admin});
+            await expectRevert(votingInstance.endProposalsRegistering.call({from: voter1}), "Ownable: caller is not the owner");
+            // Fast forward
+            await votingInstance.endProposalsRegistering({from: admin});
+            await expectRevert(votingInstance.startVotingSession.call({from: voter1}), "Ownable: caller is not the owner");
+            // Fast forward
+            await votingInstance.startVotingSession({from: admin});
+            await expectRevert(votingInstance.endVotingSession.call({from: voter1}), "Ownable: caller is not the owner");
+            // Fast forward
+            await votingInstance.endVotingSession({from: admin});
+            await expectRevert(votingInstance.tallyVotes.call({from: voter1}), "Ownable: caller is not the owner");
+        });
+
+        it("... should only allow registered voters to register proposals", async () => {
+            // Fast forwarding to register proposal step
+            await votingInstance.startProposalsRegistering({from: admin});
+            // Voter 1 is not registered
+            await expectRevert(votingInstance.addProposal.call("Voter1 proposal", {from: voter1}), "You're not a voter");
+        });
+
+        it("... should only allow registered voters to vote for proposals", async () => {
+            // Fast forwarding to register proposal step
+            await votingInstance.addVoter(voter2, {from: admin});
+            await votingInstance.startProposalsRegistering({from: admin});
+            await votingInstance.addProposal("Voter2 Proposal", {from: voter2});
+            await votingInstance.endProposalsRegistering({from: admin});
+            await votingInstance.startVotingSession({from: admin});
+            // Voter 1 is not registered
+            await expectRevert(votingInstance.setVote.call(0, {from: voter1}), "You're not a voter");
+        });
+
+        it("... should forbid registered voters to vote twice", async () => {
+            // Fast forwarding to register proposal step
+            await votingInstance.addVoter(voter1, {from: admin});
+            await votingInstance.addVoter(voter2, {from: admin});
+            await votingInstance.startProposalsRegistering({from: admin});
+            await votingInstance.addProposal("Voter1 Proposal", {from: voter1});
+            await votingInstance.addProposal("Voter2 Proposal", {from: voter2});
+            await votingInstance.endProposalsRegistering({from: admin});
+            await votingInstance.startVotingSession({from: admin});
+            await votingInstance.setVote(0, {from: voter1});
+            // Voter 1 is not registered
+            await expectRevert(votingInstance.setVote.call(1, {from: voter1}), "You have already voted");
+        });
+    });
+
+    // TODO: add addVoters, addProposals and setVotes
     describe("Tests : workflow cycling", function() {
         let votingInstance;
 
