@@ -13,7 +13,6 @@ Ces scénarios sont ordonnés dans l'ordre qui me semblait le plus pertinent :
 1. Access Control : vérification des droits utilisateurs
 2. Workflow Cycling : garantit que le workflow suit un ordre précis
 3. Voting : Test les fonctionnalités de vote
-4. Misc : Tests particuliers
 
 ### Access Control - 5 tests
 
