@@ -22,7 +22,6 @@ Ce scénario nous permet de tester les droits des utilisateurs au sein d'une ses
 |     -      |should only allow admin to change workflow statuses      |startProposalsRegistering(), endProposalsRegistering(), startVotingSession(),                                                                       endVotingSession(), tallyVotes()|expectRevert                   |
 |     -      |should only allow registered voters to register proposals|addProposal()                   |expectRevert                   |
 |     -      |should only allow registered voters to vote for proposals|setVote()                       |expectRevert                   |
-|     -      |should forbid registered voters to vote twice            |setVote()                       |expectRevert                   |
 
 ---
 
@@ -85,4 +84,19 @@ Le passage à l'étape suivant est testé sur l'émission de l'évènement "Work
 |Status : votes tallied                |should forbid to switch to voting session ended state        |endVotingSession()        |expectRevert                   |
 ---
 
-### Voting
+### Voting - 10 tests
+Ce scénario aborde les tests relatifs aux proposals, aux votes et au comptage. 
+|Context     |Title                                                     |Tests                           |Expect/ExpectRevert/ExpectEvent|
+|------------|----------------------------------------------------------|--------------------------------|-------------------------------|
+|-           |should register a new voter                               |addVoter()                      |expectEvent                    |
+|-           |should prevent registering a voter twice                  |addVoter()                      |expectRevert                   |
+|-           |should return the new voter informations                  |getVoter()                      |expect                         |
+|-           |should add a new proposal                                 |addProposal()                   |expectEvent                    |
+|-           |should prevent empty proposals                            |addProposal()                   |expectRevert                   |
+|-           |should return the new proposal informations               |getOneProposal()                |expect                         |
+|-           |should vote for a proposal                                |setVote()                       |expectEvent                    |
+|-           |should prevent a voter to vote twice                      |setVote()                       |expectRevert                   |
+|-           |should prevent a voter to vote for not existing proposal  |setVote()                       |expectRevert                   |
+|-           |should tally votes                                        |tallyVotes(), winningProposalID |expect                         |
+---
+

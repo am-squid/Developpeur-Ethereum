@@ -333,7 +333,7 @@ contract("TestVoting", accounts => {
             await expectRevert(votingInstance.addVoter.call(voter1, {from: admin}), "Already registered");
         });
 
-        it("... should return th new voter informations", async () => {
+        it("... should return the new voter informations", async () => {
             const voter = await votingInstance.getVoter.call(voter1, {from: voter1});
             expect(voter.isRegistered).to.be.true;
             expect(new BN(voter.voteProposalId)).to.be.bignumber.equal(new BN(0));
