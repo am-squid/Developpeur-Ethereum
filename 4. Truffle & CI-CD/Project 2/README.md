@@ -3,7 +3,6 @@
 ## Informations générales
 
 
-
 ## Liste des tests
 Les tests sont répartis en différents scénarios.
 Ces scénarios sont ordonnés dans l'ordre qui me semblait le plus pertinent :
@@ -14,6 +13,7 @@ Ces scénarios sont ordonnés dans l'ordre qui me semblait le plus pertinent :
 4. Misc : Tests particuliers
 
 ### Access Control - 5 tests
+
 Ce scénario nous permet de tester les droits des utilisateurs au sein d'une session de vote.
 
 |Context     |Title                                                    |Tests                           |Expect/ExpectRevert/ExpectEvent|
@@ -26,6 +26,7 @@ Ce scénario nous permet de tester les droits des utilisateurs au sein d'une ses
 ---
 
 ### Workflow cycling - 46 tests
+
 Lors de ce scénario, nous passons sur tous les états du workflow pour vérifier que le séquencement des étapes est bien respecté.
 
 Le découpage en contexte est fait sur les différents états. 
@@ -85,6 +86,7 @@ Le passage à l'étape suivant est testé sur l'émission de l'évènement "Work
 ---
 
 ### Voting - 10 tests
+
 Ce scénario aborde les tests relatifs aux proposals, aux votes et au comptage. 
 |Context     |Title                                                     |Tests                           |Expect/ExpectRevert/ExpectEvent|
 |------------|----------------------------------------------------------|--------------------------------|-------------------------------|
