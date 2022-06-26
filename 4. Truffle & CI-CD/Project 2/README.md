@@ -2,6 +2,8 @@
 
 ## Informations générales
 
+## eth-gas-reporter 
+
 
 ## Liste des tests
 Les tests sont répartis en différents scénarios.
@@ -101,4 +103,3 @@ Ce scénario aborde les tests relatifs aux proposals, aux votes et au comptage.
 |-           |should prevent a voter to vote for not existing proposal  |setVote()                       |expectRevert                   |
 |-           |should tally votes                                        |tallyVotes(), winningProposalID |expect                         |
 ---
-
