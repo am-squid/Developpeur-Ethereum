@@ -2,8 +2,16 @@
 
 ## Informations générales
 
+
+
 ## Liste des tests
 Les tests sont répartis en différents scénarios.
+Ces scénarios sont ordonnés dans l'ordre qui me semblait le plus pertinent :
+
+1. Access Control : vérification des droits utilisateurs
+2. Workflow Cycling : garantit que le workflow suit un ordre précis
+3. Voting : Test les fonctionnalités de vote
+4. Misc : Tests particuliers
 
 ### Access Control - 5 tests
 Ce scénario nous permet de tester les droits des utilisateurs au sein d'une session de vote.
@@ -18,7 +26,7 @@ Ce scénario nous permet de tester les droits des utilisateurs au sein d'une ses
 
 ---
 
-### Workflow cycling - 41 tests
+### Workflow cycling - 46 tests
 Lors de ce scénario, nous passons sur tous les états du workflow pour vérifier que le séquencement des étapes est bien respecté.
 
 Le découpage en contexte est fait sur les différents états. 
@@ -33,12 +41,14 @@ Le passage à l'étape suivant est testé sur l'émission de l'évènement "Work
 |Status : registering Voters           |should forbid to add proposals                               |addProposal()             |expectRevert                   |
 |Status : registering Voters           |should forbid to switch to registering proposal ended state  |endRegisteringProposals() |expectRevert                   |
 |Status : registering Voters           |should forbid to switch to voting session started state      |startVotingSession()      |expectRevert                   |
+|Status : registering Voters           |should forbid to vote for a proposal                         |setVote()                 |expectRevert                   |
 |Status : registering Voters           |should forbid to switch to voting session ended state        |endVotingSession()        |expectRevert                   |
 |Status : registering Voters           |should forbid to switch to votes tallied state               |tallyVotes()              |expectRevert                   |
 |Status : registering Voters           |should allow to switch to proposal registering started state |startProposalRegistering()|expectEvent                    |
 |Status : registering proposals started|should be at the registering proposals started state         |workflowStatus            |expect                         |
 |Status : registering proposals started|should forbid to add voters                                  |addVoter()                |expectRevert                   |
 |Status : registering proposals started|should forbid to switch to voting session started state      |startVotingSession()      |expectRevert                   |
+|Status : registering proposals started|should forbid to vote for a proposal                         |setVote()                 |expectRevert                   |
 |Status : registering proposals started|should forbid to switch to voting session ended state        |endVotingSession()        |expectRevert                   |
 |Status : registering proposals started|should forbid to switch to votes tallied state               |tallyVotes()              |expectRevert                   |
 |Status : registering proposals started|should allow to switch to proposal registering ended state   |endRegisteringProposals() |expectEvent                    |
@@ -46,6 +56,7 @@ Le passage à l'étape suivant est testé sur l'émission de l'évènement "Work
 |Status : registering proposals ended  |should forbid to add voters                                  |addVoter()                |expectRevert                   |
 |Status : registering proposals ended  |should forbid to switch to registering proposal started state|startProposalRegistering()|expectRevert                   |
 |Status : registering proposals ended  |should forbid to add proposals                               |addProposal()             |expectRevert                   |
+|Status : registering proposals ended  |should forbid to vote for a proposal                         |setVote()                 |expectRevert                   |
 |Status : registering proposals ended  |should forbid to switch to voting session ended state        |endVotingSession()        |expectRevert                   |
 |Status : registering proposals ended  |should forbid to switch to votes tallied state               |tallyVotes()              |expectRevert                   |
 |Status : registering proposals ended  |should allow to switch to voting session started state       |startVotingSession()      |expectEvent                    |
@@ -62,6 +73,7 @@ Le passage à l'étape suivant est testé sur l'émission de l'évènement "Work
 |Status : voting session ended         |should forbid to add proposals                               |addProposal()             |expectRevert                   |
 |Status : voting session ended         |should forbid to switch to registering proposal ended state  |endRegisteringProposals() |expectRevert                   |
 |Status : voting session ended         |should forbid to switch to voting session started state      |startVotingSession()      |expectRevert                   |
+|Status : voting session ended         |should forbid to vote for a proposal                         |setVote()                 |expectRevert                   |
 |Status : voting session ended         |should allow to switch to votes tallied state                |tallyVotes()              |expectEvent                    |
 |Status : votes tallied                |should be at the votes tallied state                         |workflowStatus            |expect                         |
 |Status : votes tallied                |should forbid to add voters                                  |addVoter()                |expectRevert                   |
@@ -69,6 +81,7 @@ Le passage à l'étape suivant est testé sur l'émission de l'évènement "Work
 |Status : votes tallied                |should forbid to add proposals                               |addProposal()             |expectRevert                   |
 |Status : votes tallied                |should forbid to switch to registering proposal ended state  |endRegisteringProposals() |expectRevert                   |
 |Status : votes tallied                |should forbid to switch to voting session started state      |startVotingSession()      |expectRevert                   |
+|Status : votes tallied                |should forbid to vote for a proposal                         |setVote()                 |expectRevert                   |
 |Status : votes tallied                |should forbid to switch to voting session ended state        |endVotingSession()        |expectRevert                   |
 ---
 
