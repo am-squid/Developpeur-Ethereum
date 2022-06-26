@@ -69,18 +69,24 @@ contract("TestVoting", accounts => {
         });
     });
 
-    // TODO: add addVoters, addProposals and setVotes
+    // TODO: addProposals and setVotes
     describe("Tests : workflow cycling", function() {
         let votingInstance;
 
         before(async function () {
             votingInstance = await Voting.new({from: admin});
+            // Voter1 is required, else onlyVoter is triggered first
+            await votingInstance.addVoter(voter1, {from: admin});            
         });
 
         context('Workflow Status : registering Voters', function() {
             it("... should start at the registering voters state", async () => {
                 const currentStatus = await votingInstance.workflowStatus.call();
                 expect(new BN(currentStatus)).to.be.bignumber.equal(new BN(0));
+            });
+
+            it("... should forbid to add proposals", async () => {
+                await expectRevert(votingInstance.addProposal.call("Voter1 proposal", {from: voter1}), "Proposals are not allowed yet");
             });
 
             it("... should forbid to switch to registering proposal ended state", async () => {
@@ -114,6 +120,10 @@ contract("TestVoting", accounts => {
                 expect(new BN(currentStatus)).to.be.bignumber.equal(new BN(1));
             });
 
+            it("... should forbid to add voters", async () => {
+                await expectRevert(votingInstance.addVoter.call(voter1), "Voters registration is not open yet");
+            });
+
             it("... should forbid to switch to voting session started state", async () => {
                 await expectRevert(votingInstance.startVotingSession.call(), "Registering proposals phase is not finished");
             });
@@ -141,8 +151,16 @@ contract("TestVoting", accounts => {
                 expect(new BN(currentStatus)).to.be.bignumber.equal(new BN(2));
             });
 
+            it("... should forbid to add voters", async () => {
+                await expectRevert(votingInstance.addVoter.call(voter1), "Voters registration is not open yet");
+            });
+
             it("... should forbid to switch to registering proposal started state", async () => {
                 await expectRevert(votingInstance.startProposalsRegistering.call({from: admin}), 'Registering proposals cant be started now');
+            });
+
+            it("... should forbid to add proposals", async () => {
+                await expectRevert(votingInstance.addProposal.call("Voter1 proposal", {from: voter1}), "Proposals are not allowed yet");
             });
 
             it("... should forbid to switch to voting session ended state", async () => {
@@ -168,8 +186,16 @@ contract("TestVoting", accounts => {
                 expect(new BN(currentStatus)).to.be.bignumber.equal(new BN(3));
             });
 
+            it("... should forbid to add voters", async () => {
+                await expectRevert(votingInstance.addVoter.call(voter1), "Voters registration is not open yet");
+            });
+
             it("... should forbid to switch to registering proposal started state", async () => {
                 await expectRevert(votingInstance.startProposalsRegistering.call({from: admin}), 'Registering proposals cant be started now');
+            });
+
+            it("... should forbid to add proposals", async () => {
+                await expectRevert(votingInstance.addProposal.call("Voter1 proposal", {from: voter1}), "Proposals are not allowed yet");
             });
 
             it("... should forbid to switch to registering proposal ended state", async () => {
@@ -195,8 +221,16 @@ contract("TestVoting", accounts => {
                 expect(new BN(currentStatus)).to.be.bignumber.equal(new BN(4));
             });
 
+            it("... should forbid to add voters", async () => {
+                await expectRevert(votingInstance.addVoter.call(voter1), "Voters registration is not open yet");
+            });
+
             it("... should forbid to switch to registering proposal started state", async () => {
                 await expectRevert(votingInstance.startProposalsRegistering.call({from: admin}), 'Registering proposals cant be started now');
+            });
+
+            it("... should forbid to add proposals", async () => {
+                await expectRevert(votingInstance.addProposal.call("Voter1 proposal", {from: voter1}), "Proposals are not allowed yet");
             });
 
             it("... should forbid to switch to registering proposal ended state", async () => {
@@ -222,8 +256,16 @@ contract("TestVoting", accounts => {
                 expect(new BN(currentStatus)).to.be.bignumber.equal(new BN(5));
             });
 
+            it("... should forbid to add voters", async () => {
+                await expectRevert(votingInstance.addVoter.call(voter1), "Voters registration is not open yet");
+            });
+
             it("... should forbid to switch to registering proposal started state", async () => {
                 await expectRevert(votingInstance.startProposalsRegistering.call({from: admin}), 'Registering proposals cant be started now');
+            });
+
+            it("... should forbid to add proposals", async () => {
+                await expectRevert(votingInstance.addProposal.call("Voter1 proposal", {from: voter1}), "Proposals are not allowed yet");
             });
 
             it("... should forbid to switch to registering proposal ended state", async () => {
