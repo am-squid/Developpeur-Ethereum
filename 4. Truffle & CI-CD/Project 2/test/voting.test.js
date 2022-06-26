@@ -7,7 +7,7 @@ contract("TestVoting", accounts => {
     const voter1 = accounts[1];
     const voter2 = accounts[2];
     const voter3 = accounts[3];
-    const nonVoter = accounts[4];
+    const voter4 = accounts[4];
 
     describe("Tests : access control", function() {
         let votingInstance;
@@ -324,9 +324,10 @@ contract("TestVoting", accounts => {
             expectEvent(receipt, "VoterRegistered", {
                 voterAddress: voter1
             });
-            // For later test, registering the voter2 and voter3
+            // For later test, registering the voter2, voter3 and voter4
             await votingInstance.addVoter(voter2, {from: admin});
             await votingInstance.addVoter(voter3, {from: admin});
+            await votingInstance.addVoter(voter4, {from: admin});
         });
 
         it("... should prevent registering a voter twice", async () => {
@@ -382,7 +383,7 @@ contract("TestVoting", accounts => {
         });
 
         it("... should prevent a voter to vote for not existing proposal", async () => {
-            await expectRevert(votingInstance.setVote.call(999, {from: voter2}), "Proposal not found");
+            await expectRevert(votingInstance.setVote.call(999, {from: voter4}), "Proposal not found");
         });
 
         it("... should tally votes", async () => {

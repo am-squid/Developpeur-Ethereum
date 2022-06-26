@@ -13,7 +13,9 @@
     "dotenv": "^16.0.1",
     "mocha": "^10.0.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "eth-gas-reporter": "^0.2.25"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
