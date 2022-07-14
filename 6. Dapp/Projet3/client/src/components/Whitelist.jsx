@@ -5,7 +5,7 @@ import { useEth } from "../contexts/EthContext";
 function Whitelist(){
     const [newVoterInput, setNewVoterInput] = useState("");
     const [voterList, setVoterList] = useState([]);
-    const { state: { contract, accounts } } = useEth();
+    const { state: { contract, accounts, isOwner } } = useEth();
 
     const handleVoterInputChange = e => {
         setNewVoterInput(e.target.value)
@@ -18,20 +18,31 @@ function Whitelist(){
 
     const getListOfVoters = async () => {
         console.log(await contract.getPastEvents('VoterRegistered', {fromBlock: 0, toBlock: 'latest'}));
+        
     }
 
-    useEffect(() => {
-    });
+    if ( isOwner )
+    {
+        return(
+            <div>
+                <h1>Whitelist</h1>
+    
+                <input type='text' placeholder="Ajouter une adresse en tant que voteur" 
+                    value={newVoterInput} onChange={handleVoterInputChange} />
+                <button onClick={addToWhitelist}>Ajouter à la whitelist</button>
+                <button onClick={getListOfVoters}>Lister les voteurs</button>
+            </div>
+        );
+    }
 
-    return(
+    return (
         <div>
             <h1>Whitelist</h1>
-            <input type='text' placeholder="Ajouter une adresse en tant que voteur" 
-                value={newVoterInput} onChange={handleVoterInputChange} />
-            <button onClick={addToWhitelist}>Ajouter à la whitelist</button>
             <button onClick={getListOfVoters}>Lister les voteurs</button>
         </div>
     );
+
+    
 }
 
 export default Whitelist;

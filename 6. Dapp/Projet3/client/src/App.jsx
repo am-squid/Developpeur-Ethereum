@@ -1,15 +1,18 @@
-import { EthProvider } from "./contexts/EthContext";
-import NavBar from "./components/NavBar";
+import { EthProvider, useEth } from "./contexts/EthContext";
 import Whitelist from "./components/Whitelist";
 import "./App.css";
 import Proposals from "./components/Proposals";
+import Workflow from "./components/Workflow";
+import { useState } from "react";
 
 function App() {
+  const [workflowState, setWorkflowState] = useState(0);
+
   return (
     <EthProvider>
       <div id="App" >
         <div className="container">
-          <NavBar />
+          <Workflow currentState={workflowState} changeState={setWorkflowState} />
           <hr />
           <Whitelist />
           <hr />
