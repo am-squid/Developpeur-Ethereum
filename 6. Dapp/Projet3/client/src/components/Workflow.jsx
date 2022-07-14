@@ -13,10 +13,48 @@ function Workflow({currentState, changeState}) {
         "Votes fermés",
         "Résultats disponibles"
     ]
+    
 
     const nextStatus = async () => {
-        await contract.methods.startProposalsRegistering().send({ from: accounts[0] });
+        switch(currentState){
+            case 0:
+                await contract.methods.startProposalsRegistering().send({ from: accounts[0] });
+                break;
+            case 1:
+                await contract.methods.endProposalsRegistering().send({ from: accounts[0] });
+                break;
+            case 2:
+                await contract.methods.startVotingSession().send({ from: accounts[0] });
+                break;
+            case 3:
+                await contract.methods.endVotingSession().send({ from: accounts[0] });
+                break;
+            case 4:
+                await contract.methods.tallyVotes().send({ from: accounts[0] });
+                break;
+            default: break;
+        }
     }
+
+    const updateStatus = async () => {
+        if(contract)
+        {
+            let status = await contract.getPastEvents('WorkflowStatusChange');
+            if (status.length === 0)
+            {
+                return;
+            }
+            console.log(status);
+            let mostRecent = status[status.length-1].returnValues.newStatus;
+            if (parseInt(mostRecent) > currentState) {
+                changeState(parseInt(mostRecent));
+            }            
+        }        
+    } 
+
+    useEffect(()=>{
+        updateStatus();
+    }, [contract, accounts]);
 
     // The button will disappear at the end of the workflow
     let nextButton = (
@@ -24,7 +62,7 @@ function Workflow({currentState, changeState}) {
             Suivant : {statusList[currentState+1]}
         </button>
     );
-    if (currentState >= 6)
+    if (currentState >= 5)
     {
         nextButton = (<></>);
     }
