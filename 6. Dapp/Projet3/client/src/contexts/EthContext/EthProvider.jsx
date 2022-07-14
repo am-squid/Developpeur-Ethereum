@@ -20,9 +20,16 @@ function EthProvider({ children }) {
         } catch (err) {
           console.error(err);
         }
+        // Checking if the user is the owner
+        let isOwner = false;
+        const owner = await contract.methods.owner().call();
+        if(owner === accounts[0]) {
+          isOwner = true;
+        }
+
         dispatch({
           type: actions.init,
-          data: { artifact, web3, accounts, networkID, contract }
+          data: { artifact, web3, accounts, networkID, contract, isOwner }
         });
       }
     }, []);
