@@ -53,7 +53,8 @@ function Workflow({currentState, changeState}) {
     } 
 
     useEffect(()=>{
-        updateStatus();
+        const refreshTimer = setInterval(updateStatus, 2000);
+        return () => clearInterval(refreshTimer);
     }, [contract, accounts]);
 
     // The button will disappear at the end of the workflow
@@ -70,7 +71,7 @@ function Workflow({currentState, changeState}) {
     // Admin view
     if (isOwner) {
         return (
-            <div>
+            <div className="workflowContainer">
                 <div>
                     Etape : {statusList[currentState]}
                 </div>
@@ -80,7 +81,7 @@ function Workflow({currentState, changeState}) {
     }
 
     return (
-        <div>
+        <div className="workflowContainer">
             <div>
                 Etape : {statusList[currentState]}
             </div>

@@ -2,9 +2,8 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useEth } from "../contexts/EthContext";
 
-function Whitelist(){
+function Whitelist({currentState, voterList, updateVoterList}){
     const [newVoterInput, setNewVoterInput] = useState("");
-    const [voterList, setVoterList] = useState([]);
     const { state: { contract, accounts, isOwner } } = useEth();
 
     const handleVoterInputChange = e => {
@@ -16,12 +15,30 @@ function Whitelist(){
         await contract.methods.addVoter(newVoterInput).send({from: accounts[0]});
     }
 
-    const getListOfVoters = async () => {
-        console.log(await contract.getPastEvents('VoterRegistered', {fromBlock: 0, toBlock: 'latest'}));
-        
+    const updateListOfVoters = async () => {
+        let finalList = [];
+        if(contract)
+        {
+            const list = await contract.getPastEvents('VoterRegistered', {fromBlock: 0, toBlock: 'latest'});
+            list.map((voter) => {
+                finalList.push(voter.returnValues.voterAddress);
+            }); 
+            updateVoterList(finalList);
+        }        
     }
 
-    if ( isOwner )
+    useEffect(() => {
+        // We always get the voter list
+        updateListOfVoters();
+        // If we are at the registering voters status, we refresh the voter every 2 seconds
+        if(currentState === 0)
+        {
+            const refreshTimer = setInterval(updateListOfVoters, 2000);
+            return () => clearInterval(refreshTimer);
+        }                
+    }, [contract]);
+
+    if ( isOwner && currentState === 0)
     {
         return(
             <div>
@@ -30,7 +47,7 @@ function Whitelist(){
                 <input type='text' placeholder="Ajouter une adresse en tant que voteur" 
                     value={newVoterInput} onChange={handleVoterInputChange} />
                 <button onClick={addToWhitelist}>Ajouter à la whitelist</button>
-                <button onClick={getListOfVoters}>Lister les voteurs</button>
+                <button onClick={updateListOfVoters}>Lister les voteurs</button>
             </div>
         );
     }
@@ -38,7 +55,7 @@ function Whitelist(){
     return (
         <div>
             <h1>Whitelist</h1>
-            <button onClick={getListOfVoters}>Lister les voteurs</button>
+            <button onClick={updateListOfVoters}>Lister les voteurs</button>
         </div>
     );
 

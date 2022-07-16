@@ -14,9 +14,7 @@
 }
 
 #App .container {
-  width: 40%;
-  min-width: 60rem;
-  max-width: 75rem;
+  width: 100%;
   height: 100%;
 }
 
@@ -140,4 +138,45 @@ hr {
 #App .container footer a {
   display: inline-block;
   margin: 2rem 1rem 0 0;
+}
+
+.header {
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  height: 35px;
+  background-color: #1266cc;
+}
+
+.header span {
+  display: block;
+}
+
+.btnWrapper {
+  width: 60%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+}
+
+.appBtn {
+  width: 100%;
+  height: 100px;
+  margin-bottom: 10px;
+}
+
+.appBtn:hover{
+  background-color: #999;
+  cursor: pointer;
+}
+
+.appBtn span{
+  margin-left: 20px;
+}
+
+.workflowContainer {
+  height: 50px;
+  display: flex;
+  justify-content: space-evenly;
 }

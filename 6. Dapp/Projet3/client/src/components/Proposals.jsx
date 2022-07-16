@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useEth } from "../contexts/EthContext";
 
-function Proposals(){
+function Proposals(currentState){
     const [newProposalInput, setNewProposalInput] = useState("");
     const { state: { contract, accounts } } = useEth();
 
