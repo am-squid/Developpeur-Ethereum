@@ -1,5 +1,5 @@
 
-function AppBtn ({type}) {
+function AppBtn ({type, show}) {
 
     const getText = () => {
         let text = "";
@@ -22,7 +22,7 @@ function AppBtn ({type}) {
     }
 
     return(
-        <div className="appBtn" onClick={() => {console.log('clicked')}}>
+        <div className="appBtn" onClick={show}>
             <span>IMG</span>
             <span>{getText()}</span>
 
