@@ -19,11 +19,21 @@ function App() {
   const {isShowing: isVotingVisible, toggle: toggleVoting} = useModal();
   const {isShowing: isResultVisible, toggle: toggleResult} = useModal();
  
+  const addNewVoter = (voter) => {
+    if (voterList.indexOf(voter) > -1) {
+      return;
+    }
+    // Adding the new voter to the list
+    let tempList = voterList;
+    voterList.push(voter);
+    setVoterList(tempList);
+  }
+
   const addProposalToList = (proposal) => {
     // Checking if the proposal is new before storing it
     let isNew = true;
     proposalList.map((storedProposal) => {
-      if(proposal.key === storedProposal.key) {
+      if(proposal.id === storedProposal.id) {
         isNew = false;
       }
     });
@@ -33,26 +43,25 @@ function App() {
       tempList.push(proposal);
       setProposalList(tempList);
     }
-    
   }
 
   return (
     <EthProvider>
       <EventWatcher 
         currentState={workflowState}
-        refreshVoterList={setVoterList}
-        addToProposalList={addProposalToList}
         changeState={setWorkflowState}
+        addVoter={addNewVoter}
+        addToProposalList={addProposalToList}
       />
       <div id="App" >
         <div className="container">
           <Header />
           <Workflow currentState={workflowState}/>
           <div className="btnWrapper">
-            <AppBtn type="voters" show={toggleVoterList}/>
-            <AppBtn type="proposals" show={toggleProposals}/>
-            <AppBtn type="voting" show={toggleVoting}/>
-            <AppBtn type="result" show={toggleResult}/>
+            <AppBtn type="voters" show={toggleVoterList} currentState={workflowState}/>
+            <AppBtn type="proposals" show={toggleProposals} currentState={workflowState}/>
+            <AppBtn type="voting" show={toggleVoting} currentState={workflowState}/>
+            <AppBtn type="result" show={toggleResult} currentState={workflowState}/>
 
             <Modal isShowing={isVoterListVisible} hide={toggleVoterList} title="Liste des votants">
               <Whitelist currentState={workflowState} voters={voterList}/>
@@ -63,7 +72,7 @@ function App() {
             <Modal isShowing={isVotingVisible} hide={toggleVoting} title="Voter"/>
             <Modal isShowing={isResultVisible} hide={toggleResult} title="Resultat"/>
 
-            <button onClick={() => {console.log(workflowState)}}>Test</button>
+            <button onClick={() => {console.log(proposalList)}}>Test</button>
           </div>
         </div>
       </div>

@@ -14,19 +14,24 @@ function Proposals({ currentState, proposals }) {
     }
 
     let proposalBoard = (
-        <table>
-            <thead>
-                <td>Description</td>
-                <td>Nombre de vote</td>
-            </thead>
-            <tbody>
-                {
-                    proposals.map((proposal, index) => {
-                        return (<tr><td>{proposal.description}</td><td>{proposal.voteCount}</td></tr>);
-                    })
-                }
-            </tbody>
-        </table>
+        <div className="tableContainer">
+            <table>
+                <thead>
+                    <tr>
+                        <td>Numéro</td>
+                        <td>Description</td>
+                        <td>Nombre de vote</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {
+                        proposals.map((proposal, index) => {
+                            return (<tr><td>{proposal.id}</td><td>{proposal.description}</td><td>{proposal.voteCount}</td></tr>);
+                        })
+                    }
+                </tbody>
+            </table>
+        </div>
     );
 
     let voterInput = (

@@ -1,31 +1,45 @@
 
-function AppBtn ({type, show}) {
+function AppBtn ({type, show, currentState}) {
 
     const getText = () => {
         let text = "";
         switch(type) {
             case "voters":
                 text="Liste des votants";
-                break;
+                return text;
             case "proposals": 
                 text="Liste des propositions";
-                break;
+                return text;
             case "voting": 
+                if(currentState != 3) {
+                    text="Les votes ne sont pas ouverts";
+                    return text;
+                }
                 text="Voter";
-                break;
+                return text;
             case "result":
+                if(currentState != 5) {
+                    return "Les résultats ne sont pas encore disponibles";
+                }
                 text="Voir la proposition gagnante";
-                break;
+                return text;
             default: break;
         }
-        return text;
+    }
+
+    let className = "appBtn";
+    if(currentState != 3 && type === "voting") {
+        className += " disabled";
+    }
+
+    if(currentState != 5 && type === "result") {
+        className += " disabled";
     }
 
     return(
-        <div className="appBtn" onClick={show}>
-            <span>IMG</span>
-            <span>{getText()}</span>
-
+        <div className={className} onClick={show}>
+            <div className="btnImg">IMG</div>
+            <div className="btnText">{getText()}</div>
         </div>
     );
 }
