@@ -9,11 +9,13 @@ import AppBtn from "./components/AppBtn";
 import useModal from "./components/hook/useModal";
 import Modal from "./components/modal";
 import EventWatcher from "./components/EventWatcher";
+import Vote from "./components/Vote";
 
 function App() {
   const [workflowState, setWorkflowState] = useState(0);
   const [voterList, setVoterList] = useState([]);
   const [proposalList, setProposalList] = useState([]);
+  const [voteList, setVoteList] = useState([]);
   const {isShowing: isVoterListVisible, toggle: toggleVoterList} = useModal();
   const {isShowing: areProposalsVisible, toggle: toggleProposals} = useModal();
   const {isShowing: isVotingVisible, toggle: toggleVoting} = useModal();
@@ -45,6 +47,22 @@ function App() {
     }
   }
 
+  const addVoteToList = (vote) => {
+    // Checking if the proposal is new before storing it
+    let isNew = true;
+    voteList.map((storedVote) => {
+      if(vote.address === storedVote.address) {
+        isNew = false;
+      }
+    });
+    // The proposal is a new one, we store it
+    if(isNew) {
+      let tempList = voteList;
+      tempList.push(vote);
+      setVoteList(tempList);
+    }
+  }
+
   return (
     <EthProvider>
       <EventWatcher 
@@ -52,6 +70,7 @@ function App() {
         changeState={setWorkflowState}
         addVoter={addNewVoter}
         addToProposalList={addProposalToList}
+        addToVoteList={addVoteToList}
       />
       <div id="App" >
         <div className="container">
@@ -69,7 +88,9 @@ function App() {
             <Modal isShowing={areProposalsVisible} hide={toggleProposals} title="Liste des propositions">
               <Proposals currentState={workflowState} proposals={proposalList}/>
             </Modal>
-            <Modal isShowing={isVotingVisible} hide={toggleVoting} title="Voter"/>
+            <Modal isShowing={isVotingVisible} hide={toggleVoting} title="Voter">
+              <Vote currentState={workflowState} votes={voteList}/>
+            </Modal>
             <Modal isShowing={isResultVisible} hide={toggleResult} title="Resultat"/>
 
             <button onClick={() => {console.log(proposalList)}}>Test</button>

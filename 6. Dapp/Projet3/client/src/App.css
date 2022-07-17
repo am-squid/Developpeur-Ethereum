@@ -165,14 +165,14 @@ hr {
   width: 100%;
   height: 100px;
   margin-bottom: 10px;
-  background-color: aquamarine;
+  background-color: #ead46a;
   display: flex;
   justify-content: space-between;
   line-height: 100px;
 }
 
 .appBtn:hover{
-  background-color: #999;
+  background-color: #6aea94;
   cursor: pointer;
 }
 
@@ -213,17 +213,17 @@ hr {
   font-size: 1.8rem;
 }
 
-.proposalContainer .tableContainer {
+.tableContainer {
   height: 90%;
   width: 100%;
   overflow: auto;
 }
 
-.proposalContainer .tableContainer table {
+.tableContainer table {
   width: 100%;
 }
 
-.proposalContainer thead{
+.tableContainer thead{
   text-align: center;
   background-color: #ccc;
 }

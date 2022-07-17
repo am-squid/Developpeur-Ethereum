@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { useEth } from "../contexts/EthContext";
 
-function EventWatcher({currentState, changeState, addVoter, addToProposalList}) {
+function EventWatcher({currentState, changeState, addVoter, addToProposalList, addToVoteList}) {
     const { state: { contract, accounts, isOwner } } = useEth();
     const [isInit, setIsInit] = useState(true);
 
@@ -12,7 +12,7 @@ function EventWatcher({currentState, changeState, addVoter, addToProposalList}) 
         let status = await contract.getPastEvents('WorkflowStatusChange', { fromBlock: 0, toBlock: 'latest' });
         let mostRecent = status[status.length-1].returnValues.newStatus;
         if (parseInt(mostRecent) > currentState) {
-            changeState(parseInt(mostRecent));
+            nextStatus(mostRecent);
         }
 
         const listVoter = await contract.getPastEvents('VoterRegistered', { fromBlock: 0, toBlock: 'latest' });
@@ -24,11 +24,24 @@ function EventWatcher({currentState, changeState, addVoter, addToProposalList}) 
         listProposal.map(async (proposalId) => {
             addProposal(proposalId);
         });
+
+        const listVote = await contract.getPastEvents('Voted', { fromBlock: 0, toBlock: 'latest' });
+        listVote.map(async (vote) => {
+            addVote(vote);
+        });
+    }
+
+    const nextStatus = (statusNb) => {
+        changeState(parseInt(statusNb));
     }
 
     const addProposal = async (proposalId) => {
         let proposal = await contract.methods.getOneProposal(proposalId.returnValues.proposalId).call({from: accounts[0]});
         addToProposalList({'id':proposalId.returnValues.proposalId, 'description': proposal.description, 'voteCount': proposal.voteCount});
+    }
+
+    const addVote = async (vote) => {
+        addToVoteList({'address':vote.returnValues.address, 'proposalId': vote.returnValues.proposalId});
     }
 
     useEffect(() => {
@@ -47,7 +60,7 @@ function EventWatcher({currentState, changeState, addVoter, addToProposalList}) 
                 console.log('WorkflowStatusChange connected');
             })
             .on('data', (event) => {
-                changeState(event.returnValues.newStatus);
+                nextStatus(event.returnValues.newStatus);
             })
     
             contract.events.VoterRegistered()
@@ -64,6 +77,14 @@ function EventWatcher({currentState, changeState, addVoter, addToProposalList}) 
             })
             .on('data', async (event) => {
                 addProposal(event)
+            })
+
+            contract.events.Voted()
+            .on('connected', (subscriptionId) => {
+                console.log('Voted connected');
+            })
+            .on('data', async (event) => {
+                addVote(event)
             })
             
         }

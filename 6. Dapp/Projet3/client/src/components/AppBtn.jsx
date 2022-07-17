@@ -8,6 +8,10 @@ function AppBtn ({type, show, currentState}) {
                 text="Liste des votants";
                 return text;
             case "proposals": 
+                if(currentState < 1) {
+                    text="Les propositions ne sont pas disponibles";
+                    return text;
+                }
                 text="Liste des propositions";
                 return text;
             case "voting": 
@@ -28,6 +32,10 @@ function AppBtn ({type, show, currentState}) {
     }
 
     let className = "appBtn";
+    if(currentState < 1 && type === "proposals") {
+        className += " disabled";
+    }
+
     if(currentState != 3 && type === "voting") {
         className += " disabled";
     }
