@@ -27,7 +27,7 @@ function EventWatcher({currentState, changeState, addVoter, addToProposalList, a
 
         const listVote = await contract.getPastEvents('Voted', { fromBlock: 0, toBlock: 'latest' });
         listVote.map(async (vote) => {
-            addVote(vote);
+            addVote(vote, false);
         });
     }
 
@@ -40,8 +40,8 @@ function EventWatcher({currentState, changeState, addVoter, addToProposalList, a
         addToProposalList({'id':proposalId.returnValues.proposalId, 'description': proposal.description, 'voteCount': proposal.voteCount});
     }
 
-    const addVote = async (vote) => {
-        addToVoteList({'address':vote.returnValues.address, 'proposalId': vote.returnValues.proposalId});
+    const addVote = async (vote, liveCount) => {
+        addToVoteList({'address':vote.returnValues.voter, 'proposalId': vote.returnValues.proposalId}, liveCount);
     }
 
     useEffect(() => {
@@ -84,7 +84,7 @@ function EventWatcher({currentState, changeState, addVoter, addToProposalList, a
                 console.log('Voted connected');
             })
             .on('data', async (event) => {
-                addVote(event)
+                addVote(event, true)
             })
             
         }

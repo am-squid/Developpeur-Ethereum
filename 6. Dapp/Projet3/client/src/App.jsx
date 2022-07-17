@@ -10,6 +10,7 @@ import useModal from "./components/hook/useModal";
 import Modal from "./components/modal";
 import EventWatcher from "./components/EventWatcher";
 import Vote from "./components/Vote";
+import Result from "./components/Result";
 
 function App() {
   const [workflowState, setWorkflowState] = useState(0);
@@ -47,20 +48,28 @@ function App() {
     }
   }
 
-  const addVoteToList = (vote) => {
-    // Checking if the proposal is new before storing it
+  const addVoteToList = (vote, liveCount) => {
+    // Checking if the vote is new before storing it
     let isNew = true;
     voteList.map((storedVote) => {
       if(vote.address === storedVote.address) {
         isNew = false;
       }
     });
-    // The proposal is a new one, we store it
-    if(isNew) {
-      let tempList = voteList;
-      tempList.push(vote);
-      setVoteList(tempList);
+    // If the vote is a new one, we store it
+    if(!isNew){
+      return;
     }
+    let tempList = voteList;
+    tempList.push(vote);
+    setVoteList(tempList);
+    // Updating the voteCount for the proposal if live counting is activated
+    if(!liveCount){
+      return;
+    }
+    tempList = proposalList;
+    tempList[vote.proposalId].voteCount++;
+    setProposalList(proposalList);
   }
 
   return (
@@ -91,8 +100,9 @@ function App() {
             <Modal isShowing={isVotingVisible} hide={toggleVoting} title="Voter">
               <Vote currentState={workflowState} votes={voteList}/>
             </Modal>
-            <Modal isShowing={isResultVisible} hide={toggleResult} title="Resultat"/>
-
+            <Modal isShowing={isResultVisible} hide={toggleResult} title="Resultat">
+              <Result currentState={workflowState} proposals={proposalList} />
+            </Modal>
             <button onClick={() => {console.log(proposalList)}}>Test</button>
           </div>
         </div>

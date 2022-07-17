@@ -35,7 +35,7 @@ function Vote ({currentState, votes}) {
 
     return (
         <div>
-            <div>
+            <div className="voteInput">
                 <input type="text" placeholder="Numéro de la proposition" onChange={handleVoteChange} value={voteInput}/>
                 <button onClick={sendVote}>
                     Valider votre vote
