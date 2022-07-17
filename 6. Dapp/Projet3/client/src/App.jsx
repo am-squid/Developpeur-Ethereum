@@ -19,16 +19,35 @@ function App() {
   const {isShowing: isVotingVisible, toggle: toggleVoting} = useModal();
   const {isShowing: isResultVisible, toggle: toggleResult} = useModal();
  
+  const addProposalToList = (proposal) => {
+    // Checking if the proposal is new before storing it
+    let isNew = true;
+    proposalList.map((storedProposal) => {
+      if(proposal.key === storedProposal.key) {
+        isNew = false;
+      }
+    });
+    // The proposal is a new one, we store it
+    if(isNew) {
+      let tempList = proposalList;
+      tempList.push(proposal);
+      setProposalList(tempList);
+    }
+    
+  }
+
   return (
     <EthProvider>
       <EventWatcher 
         currentState={workflowState}
         refreshVoterList={setVoterList}
+        addToProposalList={addProposalToList}
+        changeState={setWorkflowState}
       />
       <div id="App" >
         <div className="container">
           <Header />
-          <Workflow currentState={workflowState} changeState={setWorkflowState} />
+          <Workflow currentState={workflowState}/>
           <div className="btnWrapper">
             <AppBtn type="voters" show={toggleVoterList}/>
             <AppBtn type="proposals" show={toggleProposals}/>
@@ -39,12 +58,12 @@ function App() {
               <Whitelist currentState={workflowState} voters={voterList}/>
             </Modal>
             <Modal isShowing={areProposalsVisible} hide={toggleProposals} title="Liste des propositions">
-              <Proposals currentState={workflowState} proposals={voterList}/>
+              <Proposals currentState={workflowState} proposals={proposalList}/>
             </Modal>
             <Modal isShowing={isVotingVisible} hide={toggleVoting} title="Voter"/>
             <Modal isShowing={isResultVisible} hide={toggleResult} title="Resultat"/>
 
-            <button onClick={() => {console.log(voterList)}}>Test</button>
+            <button onClick={() => {console.log(workflowState)}}>Test</button>
           </div>
         </div>
       </div>

@@ -13,7 +13,7 @@ function Whitelist({ currentState, voters, updateVoterList }) {
     const addToWhitelist = async e => {
         await contract.methods.addVoter(newVoterInput).send({ from: accounts[0] });
     }
-    
+
     let voterBoard = (
         <div className="voterList">
             <table>
@@ -46,7 +46,7 @@ function Whitelist({ currentState, voters, updateVoterList }) {
     }
 
     return (
-        <div>
+        <div className="whitelistContainer">
             {voterBoard}
         </div>
     );

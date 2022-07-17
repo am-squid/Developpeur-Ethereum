@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import useEth from "../contexts/EthContext/useEth";
 
-function Workflow({currentState, changeState}) {
+function Workflow({currentState}) {
     const { state: { contract, accounts, isOwner } } = useEth();
 
     const statusList = [
@@ -35,27 +35,6 @@ function Workflow({currentState, changeState}) {
             default: break;
         }
     }
-
-    const updateStatus = async () => {
-        if(contract)
-        {
-            let status = await contract.getPastEvents('WorkflowStatusChange');
-            if (status.length === 0)
-            {
-                return;
-            }
-            console.log(status);
-            let mostRecent = status[status.length-1].returnValues.newStatus;
-            if (parseInt(mostRecent) > currentState) {
-                changeState(parseInt(mostRecent));
-            }            
-        }        
-    } 
-
-    useEffect(()=>{
-        const refreshTimer = setInterval(updateStatus, 2000);
-        return () => clearInterval(refreshTimer);
-    }, [contract, accounts]);
 
     // The button will disappear at the end of the workflow
     let nextButton = (

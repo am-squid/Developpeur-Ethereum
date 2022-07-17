@@ -26,6 +26,8 @@ function EthProvider({ children }) {
         if(owner === accounts[0]) {
           isOwner = true;
         }
+        // Getting the contract's blockNumber
+        // let txBlock = await web3.eth.getTransaction(txHash);
 
         dispatch({
           type: actions.init,
